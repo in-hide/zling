@@ -6,6 +6,9 @@ using Blog.Core.Extensions;
 using Blog.Core.Filter;
 using Blog.Core.Hubs;
 using Blog.Core.IServices;
+using Blog.Core.Middlewares;
+using Blog.Core.Model.Seed;
+using Blog.Core.SqlSugarDbRepository;
 using Blog.Core.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -131,6 +134,7 @@ namespace Blog.Core
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
+            services.AddSqlSugarDbStorage();
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
 
             _services = services;

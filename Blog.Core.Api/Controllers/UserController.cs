@@ -9,11 +9,15 @@ using Blog.Core.Common.HttpContextUser;
 using Blog.Core.IRepository.UnitOfWork;
 using Blog.Core.IServices;
 using Blog.Core.Model;
+using Blog.Core.Model.IDS4DbModels;
 using Blog.Core.Model.Models;
+using Blog.Core.SqlSugarDbRepository;
+using Blog.Core.SqlSugarDbRepository.Interface;
 using Blog.Core.Model.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SqlSugar;
 
 namespace Blog.Core.Controllers
 {
@@ -31,6 +35,8 @@ namespace Blog.Core.Controllers
         readonly IRoleServices _roleServices;
         private readonly IDepartmentServices _departmentServices;
         private readonly IUser _user;
+        private readonly ISqlSugarProviderStorage<ISqlSugarProvider> _sqlSugarProviderStorage;
+        private readonly ISqlSugarRepository<ApplicationUser> _sqlRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
 
@@ -43,6 +49,14 @@ namespace Blog.Core.Controllers
         /// <param name="roleServices"></param>
         /// <param name="departmentServices"></param>
         /// <param name="user"></param>
+        /// <param name="sqlSugarProviderStorage"></param>
+        /// <param name="sqlRepository"></param>
+        /// <param name="logger"></param>
+        public UserController(IUnitOfWork unitOfWork, ISysUserInfoServices sysUserInfoServices, IUserRoleServices userRoleServices, IRoleServices roleServices
+            , IUser user
+            , ISqlSugarProviderStorage<ISqlSugarProvider> sqlSugarProviderStorage
+            , ISqlSugarRepository<ApplicationUser> sqlRepository
+            , ILogger<UserController> logger)
         /// <param name="mapper"></param>
         /// <param name="logger"></param>
         public UserController(IUnitOfWork unitOfWork, ISysUserInfoServices sysUserInfoServices,
@@ -57,6 +71,8 @@ namespace Blog.Core.Controllers
             _roleServices = roleServices;
             _departmentServices = departmentServices;
             _user = user;
+            _sqlSugarProviderStorage = sqlSugarProviderStorage;
+            _sqlRepository = sqlRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -131,6 +147,48 @@ namespace Blog.Core.Controllers
         {
             _logger.LogError("test wrong");
             return "value";
+        }
+
+        // GET: api/User/5
+        [HttpGet]
+        [AllowAnonymous]
+        public object GetIds4User()
+        {
+            var result = new List<ApplicationUser>() { };
+            var DbName = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BlogIdpPro;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _sqlSugarProviderStorage.AddOrUpdate(DbName, new SqlSugarDbRepository.SqlSugarProvider(new SqlSugarSetting()
+            {
+                Name = DbName,
+                ConnectionString = DbName,
+                DatabaseType = DbType.SqlServer,
+                LogExecuting = (sql, pars) =>
+                {
+                    Console.WriteLine($"sql:{sql}");
+                }
+            }));
+
+
+            using (_sqlRepository.ChangeProvider(DbName))
+            {
+                result = _sqlRepository.GetCurrentSqlSugar().Queryable<ApplicationUser>()
+                            .Where(s => s.age >= 0)
+                            .ToList();
+
+            }
+
+
+            SqlSugarClient db = new SqlSugarClient(
+            new ConnectionConfig()
+            {
+                ConnectionString = DbName,
+                DbType = DbType.SqlServer,//设置数据库类型
+                IsAutoCloseConnection = true,//自动释放数据务，如果存在事务，在事务结束后释放
+                InitKeyType = InitKeyType.Attribute //从实体特性中读取主键自增列信息
+            });
+            var list = db.Queryable<ApplicationUser>().ToList();//查询所有
+
+
+            return result;
         }
 
         // GET: api/User/5

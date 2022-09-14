@@ -60,6 +60,10 @@
     <ProjectReference Include="..\Blog.Core.Extensions\Blog.Core.Extensions.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Blog.Core.Extensions\Blog.Core.Extensions.csproj" />
+		<ProjectReference Include="..\Blog.Core.SqlSugarDbRepository\Blog.Core.SqlSugarDbRepository.csproj" />
+	</ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\BlogCore.Data.json\BlogArticle.tsv" />
     <None Include="wwwroot\BlogCore.Data.json\Modules.tsv" />
