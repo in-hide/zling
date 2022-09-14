@@ -1,42 +1,44 @@
-﻿using SqlSugar;
+﻿using Blog.Core.Model.ViewModels;
+using SqlSugar;
 using System;
+using System.Collections.Generic;
 
 namespace Blog.Core.Model.Models
 {
     /// <summary>
     /// 任务计划表
     /// </summary>
-    public class TasksQz : RootEntity
+    public class TasksQz : RootEntityTkey<int>
     {
         /// <summary>
         /// 任务名称
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+        [SugarColumn(Length = 200, IsNullable = true)]
         public string Name { get; set; }
         /// <summary>
         /// 任务分组
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+        [SugarColumn(Length = 200, IsNullable = true)]
         public string JobGroup { get; set; }
         /// <summary>
         /// 任务运行时间表达式
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+        [SugarColumn(Length = 200, IsNullable = true)]
         public string Cron { get; set; }
         /// <summary>
         /// 任务所在DLL对应的程序集名称
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+        [SugarColumn(Length = 200, IsNullable = true)]
         public string AssemblyName { get; set; }
         /// <summary>
         /// 任务所在类
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+        [SugarColumn(Length = 200, IsNullable = true)]
         public string ClassName { get; set; }
         /// <summary>
         /// 任务描述
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+        [SugarColumn(Length = 1000, IsNullable = true)]
         public string Remark { get; set; }
         /// <summary>
         /// 执行次数
@@ -59,6 +61,10 @@ namespace Blog.Core.Model.Models
         /// </summary>
         public int IntervalSecond { get; set; }
         /// <summary>
+        /// 循环执行次数
+        /// </summary>
+        public int CycleRunTimes { get; set; }
+        /// <summary>
         /// 是否启动
         /// </summary>
         public bool IsStart { get; set; } = false;
@@ -75,5 +81,10 @@ namespace Blog.Core.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true)]
         public DateTime CreateTime { get; set; } = DateTime.Now;
+        /// <summary>
+        /// 任务内存中的状态
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public List<TaskInfoDto> Triggers { get; set; }
     }
 }

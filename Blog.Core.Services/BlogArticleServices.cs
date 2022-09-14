@@ -13,12 +13,10 @@ namespace Blog.Core.Services
 {
     public class BlogArticleServices : BaseServices<BlogArticle>, IBlogArticleServices
     {
-        IBaseRepository<BlogArticle> _dal;
+        public IBaseRepository<BlogArticle> _dal { get; set; }
         IMapper _mapper;
-        public BlogArticleServices(IBaseRepository<BlogArticle> dal, IMapper mapper)
+        public BlogArticleServices(IMapper mapper)
         {
-            this._dal = dal;
-            base.BaseDal = dal;
             this._mapper = mapper;
         }
         /// <summary>
@@ -53,40 +51,6 @@ namespace Blog.Core.Services
                     models.previousID = prevBlogs[1].bID;
                 }
 
-                //BlogArticle prevblog;
-                //BlogArticle nextblog;
-
-
-                //int blogIndex = bloglist.FindIndex(item => item.bID == id);
-                //if (blogIndex >= 0)
-                //{
-                //    try
-                //    {
-                //        prevblog = blogIndex > 0 ? bloglist[blogIndex - 1] : null;
-                //        nextblog = blogIndex + 1 < bloglist.Count() ? bloglist[blogIndex + 1] : null;
-
-
-                //        // 注意就是这里,mapper
-                //        models = _mapper.Map<BlogViewModels>(blogArticle);
-
-                //        if (nextblog != null)
-                //        {
-                //            models.next = nextblog.btitle;
-                //            models.nextID = nextblog.bID;
-                //        }
-
-                //        if (prevblog != null)
-                //        {
-                //            models.previous = prevblog.btitle;
-                //            models.previousID = prevblog.bID;
-                //        }
-                //        var entity2Viewmodel = _mapper.Map<BlogArticle>(models);
-
-                //    }
-                //    catch (Exception ex) { throw new Exception(ex.Message); }
-                //}
-
-
                 blogArticle.btraffic += 1;
                 await base.Update(blogArticle, new List<string> { "btraffic" });
             }
@@ -99,7 +63,6 @@ namespace Blog.Core.Services
         /// <summary>
         /// 获取博客列表
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         [Caching(AbsoluteExpiration = 10)]
         public async Task<List<BlogArticle>> GetBlogs()

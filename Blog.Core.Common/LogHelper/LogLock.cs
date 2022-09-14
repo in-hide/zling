@@ -1,4 +1,5 @@
 ﻿using Blog.Core.Common.Helper;
+using log4net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Blog.Core.Common.LogHelper
 {
     public class LogLock
     {
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(LogLock));
         static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
         static int WritedCount = 0;
         static int FailedCount = 0;
@@ -22,7 +23,20 @@ namespace Blog.Core.Common.LogHelper
             _contentRoot = contentPath;
         }
 
-        public static void OutSql2Log(string prefix, string[] dataParas, bool IsHeader = true)
+        public static void OutSql2Log(string prefix, string[] dataParas, bool IsHeader = true, bool isWrt = false)
+        {
+
+            if (Appsettings.app(new string[] { "AppSettings", "LogToDb", "Enabled" }).ObjToBool())
+            {
+                OutSql2LogToDB(prefix, dataParas, IsHeader);
+            }
+            else
+            {
+                OutSql2LogToFile(prefix, dataParas, IsHeader, isWrt);
+            }
+        }
+
+        public static void OutSql2LogToFile(string prefix, string[] dataParas, bool IsHeader = true, bool isWrt = false)
         {
             try
             {
@@ -39,7 +53,38 @@ namespace Blog.Core.Common.LogHelper
                 }
                 //string logFilePath = Path.Combine(path, $@"{filename}.log");
                 var logFilePath = FileHelper.GetAvailableFileWithPrefixOrderSize(folderPath, prefix);
-
+                switch (prefix)
+                {
+                    case "AOPLog":
+                        ApiLogAopInfo apiLogAopInfo = JsonConvert.DeserializeObject<ApiLogAopInfo>(dataParas[0]);
+                        //记录被拦截方法信息的日志信息
+                        var dataIntercept = "" +
+                            $"【操作时间】：{apiLogAopInfo.RequestTime}\r\n" +
+                            $"【当前操作用户】：{ apiLogAopInfo.OpUserName} \r\n" +
+                            $"【当前执行方法】：{ apiLogAopInfo.RequestMethodName} \r\n" +
+                            $"【携带的参数有】： {apiLogAopInfo.RequestParamsName} \r\n" +
+                            $"【携带的参数JSON】： {apiLogAopInfo.RequestParamsData} \r\n" +
+                            $"【响应时间】：{apiLogAopInfo.ResponseIntervalTime}\r\n" +
+                            $"【执行完成时间】：{apiLogAopInfo.ResponseTime}\r\n" +
+                            $"【执行完成结果】：{apiLogAopInfo.ResponseJsonData}\r\n";
+                        dataParas = new string[] { dataIntercept };
+                        break;
+                    case "AOPLogEx":
+                        ApiLogAopExInfo apiLogAopExInfo = JsonConvert.DeserializeObject<ApiLogAopExInfo>(dataParas[0]);
+                        var dataInterceptEx = "" +
+                            $"【操作时间】：{apiLogAopExInfo.ApiLogAopInfo.RequestTime}\r\n" +
+                            $"【当前操作用户】：{ apiLogAopExInfo.ApiLogAopInfo.OpUserName} \r\n" +
+                            $"【当前执行方法】：{ apiLogAopExInfo.ApiLogAopInfo.RequestMethodName} \r\n" +
+                            $"【携带的参数有】： {apiLogAopExInfo.ApiLogAopInfo.RequestParamsName} \r\n" +
+                            $"【携带的参数JSON】： {apiLogAopExInfo.ApiLogAopInfo.RequestParamsData} \r\n" +
+                            $"【响应时间】：{apiLogAopExInfo.ApiLogAopInfo.ResponseIntervalTime}\r\n" +
+                            $"【执行完成时间】：{apiLogAopExInfo.ApiLogAopInfo.ResponseTime}\r\n" +
+                            $"【执行完成结果】：{apiLogAopExInfo.ApiLogAopInfo.ResponseJsonData}\r\n" +
+                            $"【执行完成异常信息】：方法中出现异常：{apiLogAopExInfo.ExMessage}\r\n" +
+                            $"【执行完成异常】：方法中出现异常：{apiLogAopExInfo.InnerException}\r\n";
+                        dataParas = new string[] { dataInterceptEx };
+                        break;
+                }
                 var now = DateTime.Now;
                 string logContent = String.Join("\r\n", dataParas);
                 if (IsHeader)
@@ -55,8 +100,15 @@ namespace Blog.Core.Common.LogHelper
                 //{
                 //    logContent = logContent.Substring(0, 500) + "\r\n";
                 //}
+                if (isWrt)
+                {
+                    File.WriteAllText(logFilePath, logContent);
 
-                File.AppendAllText(logFilePath, logContent);
+                }
+                else
+                {
+                    File.AppendAllText(logFilePath, logContent);
+                }
                 WritedCount++;
             }
             catch (Exception e)
@@ -73,7 +125,39 @@ namespace Blog.Core.Common.LogHelper
                 LogWriteLock.ExitWriteLock();
             }
         }
+        public static void OutSql2LogToDB(string prefix, string[] dataParas, bool IsHeader = true)
+        {
 
+            string logContent = String.Join("", dataParas);
+            if (IsHeader)
+            {
+                logContent = (String.Join("", dataParas));
+            }
+            switch (prefix)
+            {
+                case "AOPLog":
+                    log.Info(logContent);
+                    break;
+                case "AOPLogEx":
+                    log.Error(logContent);
+                    break;
+                case "RequestIpInfoLog":
+                    log.Debug(logContent);
+                    break;
+                case "RecordAccessLogs":
+                    log.Debug(logContent);
+                    break;
+                case "SqlLog":
+                    log.Info(logContent);
+                    break;
+                case "RequestResponseLog":
+                    log.Debug(logContent);
+                    break;
+                default:
+                    break;
+            }
+
+        }
         /// <summary>
         /// 读取文件内容
         /// </summary>
@@ -82,7 +166,7 @@ namespace Blog.Core.Common.LogHelper
         /// <param name="encode">编码</param>
         /// <param name="readType">读取类型(0:精准,1:前缀模糊)</param>
         /// <returns></returns>
-        public static string ReadLog(string folderPath, string fileName, Encoding encode, ReadType readType = ReadType.Accurate)
+        public static string ReadLog(string folderPath, string fileName, Encoding encode, ReadType readType = ReadType.Accurate, int takeOnlyTop = -1)
         {
             string s = "";
             try
@@ -112,6 +196,8 @@ namespace Blog.Core.Common.LogHelper
                     var allFiles = new DirectoryInfo(folderPath);
                     var selectFiles = allFiles.GetFiles().Where(fi => fi.Name.ToLower().Contains(fileName.ToLower())).ToList();
 
+                    selectFiles = takeOnlyTop > 0 ? selectFiles.OrderByDescending(d => d.Name).Take(takeOnlyTop).ToList() : selectFiles;
+
                     foreach (var item in selectFiles)
                     {
                         if (File.Exists(item.FullName))
@@ -121,6 +207,21 @@ namespace Blog.Core.Common.LogHelper
                             f2.Close();
                             f2.Dispose();
                         }
+                    }
+                }
+
+                // 根据前缀读取 最新文件 时间倒叙
+                if (readType == ReadType.PrefixLatest)
+                {
+                    var allFiles = new DirectoryInfo(folderPath);
+                    var selectLastestFile = allFiles.GetFiles().Where(fi => fi.Name.ToLower().Contains(fileName.ToLower())).OrderByDescending(d => d.Name).FirstOrDefault();
+
+                    if (selectLastestFile != null && File.Exists(selectLastestFile.FullName))
+                    {
+                        StreamReader f2 = new StreamReader(selectLastestFile.FullName, encode);
+                        s = f2.ReadToEnd();
+                        f2.Close();
+                        f2.Dispose();
                     }
                 }
             }
@@ -133,6 +234,37 @@ namespace Blog.Core.Common.LogHelper
                 LogWriteLock.ExitReadLock();
             }
             return s;
+        }
+
+        private static List<RequestInfo> GetRequestInfo(ReadType readType)
+        {
+            List<RequestInfo> requestInfos = new();
+            var accessLogs = ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog_", Encoding.UTF8, readType).ObjToString();
+            try
+            {
+                return JsonConvert.DeserializeObject<List<RequestInfo>>("[" + accessLogs + "]");
+            }
+            catch (Exception)
+            {
+                var accLogArr = accessLogs.Split("\r\n");
+                foreach (var item in accLogArr)
+                {
+                    if (item.ObjToString() != "")
+                    {
+                        try
+                        {
+                            var accItem = JsonConvert.DeserializeObject<RequestInfo>(item.TrimEnd(','));
+                            requestInfos.Add(accItem);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+
+            }
+
+            return requestInfos;
         }
 
 
@@ -183,7 +315,7 @@ namespace Blog.Core.Common.LogHelper
 
             try
             {
-                var sqllogContent = ReadLog(Path.Combine(_contentRoot, "Log"), "SqlLog_", Encoding.UTF8, ReadType.Prefix);
+                var sqllogContent = ReadLog(Path.Combine(_contentRoot, "Log"), "SqlLog_", Encoding.UTF8, ReadType.PrefixLatest);
 
                 if (!string.IsNullOrEmpty(sqllogContent))
                 {
@@ -217,7 +349,7 @@ namespace Blog.Core.Common.LogHelper
 
             try
             {
-                var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog_", Encoding.UTF8, ReadType.Prefix) + "]");
+                var Logs = GetRequestInfo(ReadType.PrefixLatest);
 
                 Logs = Logs.Where(d => d.Datetime.ObjToDate() >= DateTime.Today).ToList();
 
@@ -261,9 +393,7 @@ namespace Blog.Core.Common.LogHelper
 
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog_", Encoding.UTF8, ReadType.Prefix) + "]");
-
-                var ddd = Logs.Where(d => d.Week == "周日").ToList();
+                Logs = GetRequestInfo(ReadType.Prefix);
 
                 apiWeeks = (from n in Logs
                             group n by new { n.Week, n.Url } into g
@@ -287,7 +417,7 @@ namespace Blog.Core.Common.LogHelper
             var weeks = apiWeeks.GroupBy(x => new { x.week }).Select(s => s.First()).ToList();
             foreach (var week in weeks)
             {
-                var apiweeksCurrentWeek = apiWeeks.Where(d => d.week == week.week).OrderByDescending(d => d.count).Take(8).ToList();
+                var apiweeksCurrentWeek = apiWeeks.Where(d => d.week == week.week).OrderByDescending(d => d.count).Take(5).ToList();
                 jsonBuilder.Append("{");
 
                 jsonBuilder.Append("\"");
@@ -298,20 +428,28 @@ namespace Blog.Core.Common.LogHelper
 
                 foreach (var item in apiweeksCurrentWeek)
                 {
+                    columns.Add(item.url);
                     jsonBuilder.Append("\"");
                     jsonBuilder.Append(item.url);
                     jsonBuilder.Append("\":\"");
                     jsonBuilder.Append(item.count);
                     jsonBuilder.Append("\",");
                 }
-                jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+                if (apiweeksCurrentWeek.Count > 0)
+                {
+                    jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+                }
                 jsonBuilder.Append("},");
             }
 
-            jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+            if (weeks.Count > 0)
+            {
+                jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+            }
             jsonBuilder.Append("]");
 
-            columns.AddRange(apiWeeks.OrderByDescending(d => d.count).Take(8).Select(d => d.url).ToList());
+            //columns.AddRange(apiWeeks.OrderByDescending(d => d.count).Take(8).Select(d => d.url).ToList());
+            columns = columns.Distinct().ToList();
 
             return new RequestApiWeekView()
             {
@@ -326,7 +464,7 @@ namespace Blog.Core.Common.LogHelper
             List<ApiDate> apiDates = new List<ApiDate>();
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog_", Encoding.UTF8, ReadType.Prefix) + "]");
+                Logs = GetRequestInfo(ReadType.Prefix);
 
                 apiDates = (from n in Logs
                             group n by new { n.Date } into g
@@ -356,7 +494,7 @@ namespace Blog.Core.Common.LogHelper
             List<ApiDate> apiDates = new List<ApiDate>();
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog_", Encoding.UTF8, ReadType.Prefix) + "]");
+                Logs = GetRequestInfo(ReadType.Prefix);
 
                 apiDates = (from n in Logs
                             where n.Datetime.ObjToDate() >= DateTime.Today
@@ -384,8 +522,18 @@ namespace Blog.Core.Common.LogHelper
 
     public enum ReadType
     {
+        /// <summary>
+        /// 精确查找一个
+        /// </summary>
         Accurate,
-        Prefix
+        /// <summary>
+        /// 指定前缀，模糊查找全部
+        /// </summary>
+        Prefix,
+        /// <summary>
+        /// 指定前缀，最新一个文件
+        /// </summary>
+        PrefixLatest
     }
 
 }

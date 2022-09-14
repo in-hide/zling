@@ -7,7 +7,7 @@ namespace Blog.Core.Model.Models
     /// <summary>
     /// 路由菜单表
     /// </summary>
-    public class Permission : RootEntity
+    public class Permission : PermissionRoot<int>
     {
         public Permission()
         {
@@ -18,12 +18,12 @@ namespace Blog.Core.Model.Models
         /// <summary>
         /// 菜单执行Action名
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+        [SugarColumn(Length = 50, IsNullable = true)]
         public string Code { get; set; }
         /// <summary>
         /// 菜单显示名（如用户页、编辑(按钮)、删除(按钮)）
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+        [SugarColumn(Length = 50, IsNullable = true)]
         public string Name { get; set; }
         /// <summary>
         /// 是否是按钮
@@ -44,21 +44,8 @@ namespace Blog.Core.Model.Models
         /// <summary>
         /// 按钮事件
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+        [SugarColumn(Length = 100, IsNullable = true)]
         public string Func { get; set; }
-
-
-
-        /// <summary>
-        /// 上一级菜单（0表示上一级无菜单）
-        /// </summary>
-        public int Pid { get; set; }
-
-
-        /// <summary>
-        /// 接口api
-        /// </summary>
-        public int Mid { get; set; }
 
         /// <summary>
         /// 排序
@@ -67,12 +54,12 @@ namespace Blog.Core.Model.Models
         /// <summary>
         /// 菜单图标
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+        [SugarColumn(Length = 100, IsNullable = true)]
         public string Icon { get; set; }
         /// <summary>
         /// 菜单描述    
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+        [SugarColumn(Length = 100, IsNullable = true)]
         public string Description { get; set; }
         /// <summary>
         /// 激活状态
@@ -86,7 +73,7 @@ namespace Blog.Core.Model.Models
         /// <summary>
         /// 创建者
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+        [SugarColumn(Length = 50, IsNullable = true)]
         public string CreateBy { get; set; }
         /// <summary>
         /// 创建时间
@@ -101,7 +88,7 @@ namespace Blog.Core.Model.Models
         /// <summary>
         /// 修改者
         /// </summary>
-        [SugarColumn(ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+        [SugarColumn(Length = 50, IsNullable = true)]
         public string ModifyBy { get; set; }
         /// <summary>
         /// 修改时间
@@ -116,10 +103,6 @@ namespace Blog.Core.Model.Models
         public bool? IsDeleted { get; set; }
 
 
-
-
-        [SugarColumn(IsIgnore = true)]
-        public List<int> PidArr { get; set; }
         [SugarColumn(IsIgnore = true)]
         public List<string> PnameArr { get; set; } = new List<string>();
         [SugarColumn(IsIgnore = true)]
@@ -129,6 +112,12 @@ namespace Blog.Core.Model.Models
 
         [SugarColumn(IsIgnore = true)]
         public bool hasChildren { get; set; } = true;
+
+        [SugarColumn(IsIgnore = true)]
+        public List<Permission> Children { get; set; } = new List<Permission>();
+
+        [SugarColumn(IsIgnore = true)]
+        public Modules Module { get; set; }
 
         //public virtual ICollection<ModulePermission> ModulePermission { get; set; }
         //public virtual ICollection<RoleModulePermission> RoleModulePermission { get; set; }

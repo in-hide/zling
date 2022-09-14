@@ -1,31 +1,83 @@
-﻿Dev Build:: 
+<img align="right" height="50px" src="http://apk.neters.club/logocore.png">
 
-  [![Front](https://img.shields.io/badge/Front-VUE-d.svg)](#) [![sdk](https://img.shields.io/badge/sdk-3.1-d.svg)](#)  [![Build status](https://github.com/anjoy8/blog.core/workflows/.NET%20Core/badge.svg)](https://github.com/anjoy8/Blog.Core/actions) [![codecov](https://codecov.io/gh/anjoy8/Blog.Core/branch/master/graph/badge.svg)](https://codecov.io/gh/anjoy8/Blog.Core)  [![License MIT](https://img.shields.io/badge/license-Apache-blue.svg?style=flat-square)](https://github.com/anjoy8/Blog.Core/blob/master/LICENSE) [![Language](https://img.shields.io/badge/language-csharp-d.svg)](#) 
-[![star this repo](http://githubbadges.com/star.svg?user=anjoy8&repo=blog.core&style=flat)](https://github.com/boennemann/badges) 
-[![fork this repo](http://githubbadges.com/fork.svg?user=anjoy8&repo=blog.core&style=flat)](https://github.com/boennemann/badges/fork) 
-[![博客园](https://img.shields.io/badge/博客园-老张的哲学-brightgreen.svg)](https://www.cnblogs.com/laozhang-is-phi/)
+# Blog.Core
+
+[English](README-en.md) | 简体中文
+
+[![sdk](https://img.shields.io/badge/sdk-6.0.1-d.svg)](#)  [![Build status](https://github.com/anjoy8/blog.core/workflows/.NET%20Core/badge.svg)](https://github.com/anjoy8/Blog.Core/actions)  [![Build Status](https://dev.azure.com/laozhangisphi/anjoy8/_apis/build/status/anjoy8.Blog.Core?branchName=master)](https://dev.azure.com/laozhangisphi/anjoy8/_build?definitionId=1)  [![codecov](https://codecov.io/gh/anjoy8/Blog.Core/branch/master/graph/badge.svg)](https://codecov.io/gh/anjoy8/Blog.Core)  [![License MIT](https://img.shields.io/badge/license-Apache-blue.svg?style=flat-square)](https://github.com/anjoy8/Blog.Core/blob/master/LICENSE) [![star this repo](http://githubbadges.com/star.svg?user=anjoy8&repo=blog.core&style=flat)](https://github.com/boennemann/badges)  [![fork this repo](http://githubbadges.com/fork.svg?user=anjoy8&repo=blog.core&style=flat)](https://github.com/boennemann/badges/fork)  [![博客园](https://img.shields.io/badge/博客园-老张的哲学-brightgreen.svg)](https://www.cnblogs.com/laozhang-is-phi/)
 
 
 &nbsp;
 &nbsp;
 
+ 
+<div style="text-align: center;">
+<a href="https://mvp.microsoft.com/zh-cn/PublicProfile/5003704?fullName=anson%20zhang" >
+  <img src="http://apk.neters.club/MVP_Logo_Horizontal_Preferred_Cyan300_CMYK_72ppi.png" alt="MVP"   >
+</a>
 
-![Logo](http://apk.neters.club/logocore.png)
-![MVP](http://apk.neters.club/MVP_Logo_Horizontal_Preferred_Cyan300_CMYK_72ppi.png)
+ 
+</div>
+
+-------------------------------
+Blog.Core 开箱即用的企业级前后端分离【 .NET Core6.0 Api + Vue 2.x + RBAC】权限框架。  
+其他版本看具体分支吧🎉  
+官网：http://apk.neters.club/.doc/    
+
+  
+---------------------
+
+**已被近100家公司所使用(🐱‍🚀)：[点击查看列表](https://github.com/anjoy8/Blog.Core/issues/75)**   欢迎盖楼，留下公司真实名字的，可得定制化指导服务。  
+同时商业授权付费版也悄悄准备上线，欢迎联系老张（QQ：3143422472）。
+  
 
 
-BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET Core3.1 Api + Vue 2.x + RBAC】权限框架。 
+#### ❤ 真实用户反馈 ❤
+```
+项目单体部署，并发在400~500，一切正常(不保证自己的各种错误写法)。  
+如果搭配负载，效果更好。
 
+1、A~CoderDong:
+应用场景：使用Blog.Core为基础骨架开发，搭建Client监控类守护进程项目，To C 客户群，
+并发情况：目前压测并发5k正常8秒处理完，并发10k可15秒处理完毕，异常不会丢失。
+生产配置：一台服务器（Linux环境 + 至强8核的16G内存 + mysql数据库 + 3台Nginx负载）
+
+```
+   
+ 
+ 
 &nbsp;
+
+## 给个星星! ⭐️
+如果你喜欢这个项目或者它帮助你, 请给 Star~   
+如果你的项目中借鉴了本项目，请稍微说明下[https://github.com/anjoy8/Blog.Core/issues/75](https://github.com/anjoy8/Blog.Core/issues/75)，开源不易✨。  
+
+
 
 ### 功能与进度
 
-框架模块：  
+#### 商业授权付费版下🎁🎁🎁
+
+- [x] 包含下边框架模块中的所有功能；
+- [x] 全部表结构主键底层架构改成`string`类型（默认雪花，支持guid），更方便迁移；
+- [x] 完善部门数据权限，可以基于策略配置查看数据范围；
+- [x] 优化权限处理器，解决多实例分布式下，权限不同步问题（必须配置Redis）；
+- [x] 增加在线用户查看功能，并实现强制用户下线功能（必须配置Redis）；
+- [x] 增加用户黑名单功能（必须配置Redis）；
+- [ ] 打算增加岗位功能（单独建表），配合部门使用，目前是字符串（设计中，未完全实现）；
+- [ ] 后期优化站内通知功能，其实目前已经有SignalR来实现消息推送了，可以直接用；
+- [ ] 前端`Blog.Admin.Pro`使用`AndDesignVue`框架（设计中，未完全实现）；
+- [x] 铁粉奖励：如果参与上述功能和其他付费功能开发，可半价获取商业授权；
+
+
+
+#### 框架模块：  
 - [x] 采用`仓储+服务+接口`的形式封装框架；
 - [x] 异步 async/await 开发；
 - [x] 接入国产数据库ORM组件 —— SqlSugar，封装数据库操作；
-- [x] 支持自由切换多种数据库，Sqlite/SqlServer/MySql/PostgreSQL/Oracle；
+- [x] 支持自由切换多种数据库，MySql/SqlServer/Sqlite/Oracle/Postgresql/达梦/人大金仓；
 - [x] 实现项目启动，自动生成种子数据 ✨； 
+- [x] 实现数据库主键类型配置化，什么类型都可以自定义 ✨； 
 - [x] 五种日志记录，审计/异常/请求响应/服务操作/Sql记录等； 
 - [x] 支持项目事务处理（若要分布式，用cap即可）✨；
 - [x] 设计4种 AOP 切面编程，功能涵盖：日志、缓存、审计、事务 ✨；
@@ -44,28 +96,50 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 - [x] 支持 CORS 跨域；
 - [x] 封装 JWT 自定义策略授权；
 - [x] 使用 Log4Net 日志框架，集成原生 ILogger 接口做日志记录；
-- [x] 使用 SingleR 双工通讯 ✨；
+- [x] 使用 SignalR 双工通讯 ✨；
 - [x] 添加 IpRateLimiting 做 API 限流处理;
-- [x] 使用 Quartz.net 做任务调度;
+- [x] 使用 Quartz.net 做任务调度（目前单机多任务，集群调度暂不支持）;
 - [x] 支持 数据库`读写分离`和多库操作 ✨;
-- [ ] 计划 - 设计支付宝/微信支付;
-- [ ] 计划 - Redis/RBMQ 消息队列;
-- [ ] 计划 - 数据部门权限;
-- [ ] 计划 - ES 搜索;
+- [x] 新增 Redis 消息队列 ✨;
+- [x] 新增 RabbitMQ 消息队列 ✨;
+- [x] 新增 EventBus 事件总线 ✨;
+- [x] 新增 - 统一聚合支付;
+- [x] 新增 - Nacos注册中心配置;
+- [x] 新增 - ES 搜索配置;
+- [x] 新增 - Apollo 配置;
+- [x] 新增 Kafka 消息队列，并配合实现EventBus ✨;
+- [x] 新增 微信公众号管理，并集成到Blog.Admin后台 ✨;
+- [x] 新增 - 数据部门权限;
 
 微服务模块：
+- [x] 可配合 Docker 实现容器化；
+- [x] 可配合 Jenkins 实现CI / CD；
 - [x] 可配合 Consul 实现服务发现；
+- [x] 可配合 Nacos 实现服务发现；
 - [x] 可配合 Ocelot 实现网关处理；
 - [x] 可配合 Nginx  实现负载均衡；
 - [x] 可配合 Ids4   实现认证中心；
 
 
+### 自定义(中间件/服务)启动图
+![系统架构图](https://img.neters.club/github/load-tool.png)
+
+
 &nbsp;
 
-## 给个星星! ⭐️
-如果你喜欢这个项目或者它帮助你, 请给 Star~（辛苦星咯）
 
+## 贡献者们 
 
+Thanks goes to these wonderful people ([✨](https://github.com/anjoy8/Blog.Core/graphs/contributors)):（排名暂时按提交顺序）  
+  
+    
+<a href="https://github.com/anjoy8/blog.core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=anjoy8/blog.core" />
+</a>
+<!-- prettier-ignore-end -->
+
+This project follows the [all-contributors](https://github.com/anjoy8/Blog.Core/graphs/contributors) specification.
+Contributions of any kind are welcome!
 
 &nbsp;
 
@@ -73,7 +147,8 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 
 还在陆续整理中，不过基本操作都在,包括如何新手入门，配置数据，连接DB等等    
 
-[官方文档](http://apk.neters.club/.doc/)  
+[官方文档](http://apk.neters.club/.doc/)    
+[公众号重要文章+视频地址](https://mvp.neters.club/)    
 
 
 
@@ -83,7 +158,7 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 ### 系统架构图
 
 
-![系统架构图](http://apk.neters.club/Blog.Core.System.Architecture.png)
+![系统架构图](https://img.neters.club/github/20201228135550.png)
 
 &nbsp;
 
@@ -91,15 +166,9 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 ### 系统压测结果报告
 
 
-&nbsp;
-其他接口压测内存占用在：220~350 m 之间，具体的，自行压测即可。
-&nbsp;
-
-
-
 <div align=center><img width="500" src="http://apk.neters.club/JMeterTest.png" /></div>
 
-这只是 .netCore 后端部分，前端部分请看我的另三个Vue工程项目
+本项目是 .netCore 后端部分，前端部分请看我的另三个Vue工程项目
  
 &nbsp;
 &nbsp;
@@ -115,20 +184,12 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 
 &nbsp;
 
-### 初始项目
-
-#### 不要再使用 .sql 文件了，用下边动图的方法，直接 seed data.
-
-数据查看：[Blog.Core.Data.json](https://github.com/anjoy8/Blog.Data.Share/tree/master/BlogCore.Data.json)
-
-文章讲解：[支持多种数据库 & 快速数据库生成](https://www.cnblogs.com/laozhang-is-phi/p/10718755.html)
- 
-&nbsp;
-
+### 初始化项目
  
 
+下载项目后，编译如果没问题，直接运行即可，会自动生成种子数据，数据库是`Sqlite`，接口文档是`swagger`。    
 
-![操作流程](http://apk.neters.club/operateFlow.gif)
+更多操作，点击这里：http://apk.neters.club/.doc/guide/getting-started.html
 
 
 &nbsp;
@@ -164,14 +225,14 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 ## 售后服务与支持  
 
 鼓励作者，简单打赏，入微信群，随时随地解答我框架中（NetCore、Vue、DDD、IdentityServer4等）的疑难杂症。     
-注意是核心的问题，基础内容我建议先自学，   
-如果不想看文章和视频，可以报我的个人学习班，三杯咖啡。   
+注意主要是帮忙解决bug和思路，不会远程授课，但是可以适当发我代码，我帮忙调试，       
 打赏的时候，备注自己的微信号，我拉你进群，两天内没回应，QQ私聊我（3143422472）；   
 
 [赞赏列表](http://apk.neters.club/.doc/Contribution/)  
 
  
 <img src="http://apk.neters.club/laozhangisphigood.jpg" alt="赞赏码" width="300" >
+[图片若加载不出来，点这里](http://apk.neters.club/laozhangisphigood.jpg)
 
 
 
@@ -194,199 +255,3 @@ BCVP（Blog.Core&Vue Project）开箱即用的企业级前后端分离【 .NET C
 
 
 
-<div class="allindex">
-<h2 id="abp框架学习目录如下">.NetCore与Vue 框架学习目录如下</h2>
-<ul>
-<li>
-<h3 id="autoid-2-1-0">后端 .net core 概览</h3>
-<ul>
-<li><a id="post_title_link_9495620" href="https://www.cnblogs.com/laozhang-is-phi/p/9495620.html">框架之二 || 后端项目搭建<br></a></li>
-<li><a id="post_title_link_9495624" href="https://www.cnblogs.com/laozhang-is-phi/p/9495624.html">Swagger的使用 3.1</a></li>
-<li><a id="post_title_link_9507387" href="https://www.cnblogs.com/laozhang-is-phi/p/9507387.html">Swagger的使用 3.2</a></li>
-<li><a id="post_title_link_9511869" href="https://www.cnblogs.com/laozhang-is-phi/p/9511869.html">Swagger的使用 3.3 JWT权限验证【修改】</a></li>
-<li><a id="post_title_link_9896431" href="https://www.cnblogs.com/laozhang-is-phi/p/9896431.html">36 ║解决JWT权限验证过期问题</a></li>
-<li><a id="post_title_link_9516890" href="https://www.cnblogs.com/laozhang-is-phi/p/9516890.html">API项目整体搭建 6.1 仓储模式</a></li>
-<li><a id="post_title_link_9523148" href="https://www.cnblogs.com/laozhang-is-phi/p/9523148.html">API项目整体搭建 6.2 轻量级ORM</a></li>
-<li><a id="post_title_link_9529480" href="https://www.cnblogs.com/laozhang-is-phi/p/9529480.html">API项目整体搭建 6.3 异步泛型仓储+依赖注入初探</a></li>
-<li><a id="post_title_link_9541414" href="https://www.cnblogs.com/laozhang-is-phi/p/9541414.html">依赖注入IoC学习 + AOP切面编程初探</a></li>
-<li><a id="post_title_link_9547574" href="https://www.cnblogs.com/laozhang-is-phi/p/9547574.html">AOP面向切面编程浅解析：简单日志记录 + 服务切面缓存</a></li>
-<li><a id="post_title_link_9554210" href="https://www.cnblogs.com/laozhang-is-phi/p/9554210.html">AOP自定义筛选，Redis入门 11.1</a></li>
-<li><a id="post_title_link_9560949" href="https://www.cnblogs.com/laozhang-is-phi/p/9560949.html">三种跨域方式比较，DTOs(数据传输对象)初探</a></li>
-<li><a id="post_title_link_9565227" href="https://www.cnblogs.com/laozhang-is-phi/p/9565227.html">DTOs 对象映射使用，项目部署Windows+Linux完整版</a></li>
-<li><a id="post_title_link_9757999" href="https://www.cnblogs.com/laozhang-is-phi/p/9757999.html">三十二║ 四种方法快速实现项目的半自动化搭建</a></li>
-<li><a id="post_title_link_9767400" href="https://www.cnblogs.com/laozhang-is-phi/p/9767400.html">三十三║ ⅖ 种方法实现完美跨域</a></li>
-<li><a id="post_title_link_9795689" href="https://www.cnblogs.com/laozhang-is-phi/p/9795689.html">三十四║ Swagger 处理多版本控制，所带来的思考</a></li>
-<li><a id="post_title_link_9855836" href="https://www.cnblogs.com/laozhang-is-phi/p/9855836.html">三十五║ 完美实现全局异常日志记录</a></li>
-<li><a id="post_title_link_10139204" href="https://www.cnblogs.com/laozhang-is-phi/p/10139204.html">37 ║JWT完美实现权限与接口的动态分配</a></li>
- <li><a id="link_post_title" class="link-post-title" href="https://www.cnblogs.com/laozhang-is-phi/p/10173536.html">38 ║自动初始化数据库</a></li>
-<li><a id="post_title_link_10205495" href="https://www.cnblogs.com/laozhang-is-phi/p/10205495.html">39 || 想创建自己的dotnet模板么？看这里</a></li>
-<li><a id="post_title_link_10287023" href="https://www.cnblogs.com/laozhang-is-phi/p/10287023.html">40 || 完美基于AOP的接口性能分析</a></li>
- <li><a id="post_title_link_10322040" href="https://www.cnblogs.com/laozhang-is-phi/p/10322040.html">41 || Nginx+Github+PM2 快速部署项目(一)</a></li>
-
-<li><a href="https://www.cnblogs.com/laozhang-is-phi/p/10462316.html">42&nbsp;</a><a id="post_title_link_9767400" href="https://www.cnblogs.com/laozhang-is-phi/p/9767400.html">║</a><a id="post_title_link_10462316" href="https://www.cnblogs.com/laozhang-is-phi/p/10462316.html"> 完美实现 JWT 滑动授权刷新</a></li>
-<li><a id="post_title_link_10718755" href="https://www.cnblogs.com/laozhang-is-phi/p/10718755.html">43 ║ 支持多种数据库 &amp; 快速数据库生成</a></li>
-<li><a id="post_title_link_10836887" href="https://www.cnblogs.com/laozhang-is-phi/p/beautifulPublish-mostBugs.html">43 ║最全的部署方案 &amp; 最丰富的错误分析【再会】</a></li>
-<li><a id="post_title_link_11605436" href="https://www.cnblogs.com/laozhang-is-phi/p/11605436.html">45 ║ 终于解决了事务问题</a></li>
-<li><a class="entry" href="https://www.cnblogs.com/laozhang-is-phi/p/11833800.html" target="_blank">46 ║ 授权认证：自定义返回格式</a> </li>
-
-
-
-
-
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</li>
-<li>
-<h3 id="autoid-2-2-0">前端 Vue 概览</h3>
-<ul>
-<li><a id="post_title_link_9577805" href="https://www.cnblogs.com/laozhang-is-phi/p/9577805.html">十四 ║ VUE 计划书 &amp; 我的前后端开发简史</a></li>
-<li><a id="post_title_link_9580807" href="https://www.cnblogs.com/laozhang-is-phi/p/9580807.html">十五 ║Vue基础：JS面向对象&amp;字面量&amp; this字</a></li>
-<li><a id="post_title_link_9585766" href="https://www.cnblogs.com/laozhang-is-phi/p/9585766.html">十六 ║Vue基础：ES6初体验 &amp; 模块化编程</a></li>
-<li><a id="post_title_link_9593740" href="https://www.cnblogs.com/laozhang-is-phi/p/9593740.html">十七 ║Vue基础：使用Vue.js 来画博客首页+指令(一)</a></li>
-<li><a id="post_title_link_9602077" href="https://www.cnblogs.com/laozhang-is-phi/p/9602077.html">十八║Vue基础: 指令(下)+计算属性+watch</a></li>
-<li><a id="post_title_link_9611632" href="https://www.cnblogs.com/laozhang-is-phi/p/9611632.html">十九║Vue基础: 样式动态绑定+生命周期</a></li>
-<li><a id="post_title_link_9622031" href="https://www.cnblogs.com/laozhang-is-phi/p/9622031.html">二十║Vue基础终篇：组件详解+项目说明<br><br></a></li>
-<li>👆 上边的这些基础，可以不用看，如果你只想快速入门 Vue 的话<br><br></li>
-<li><a id="post_title_link_9629026" href="https://www.cnblogs.com/laozhang-is-phi/p/9629026.html">二十一║Vue实战：开发环境搭建【详细版】</a></li>
-<li><a id="post_title_link_9640974" href="https://www.cnblogs.com/laozhang-is-phi/p/9640974.html">二十二║Vue实战：个人博客第一版(axios+router)</a></li>
-<li><a id="post_title_link_9647008" href="https://www.cnblogs.com/laozhang-is-phi/p/9647008.html">二十三║Vue实战：Vuex 其实很简单</a></li>
-<li><a id="post_title_link_9658019" href="https://www.cnblogs.com/laozhang-is-phi/p/9658019.html">二十四║ Vuex + JWT 实现授权验证登陆</a></li>
-<li><a id="post_title_link_9670342" href="https://www.cnblogs.com/laozhang-is-phi/p/9670342.html">二十五║初探SSR服务端渲染（个人博客二）</a></li>
-<li><a id="post_title_link_9675822" href="https://www.cnblogs.com/laozhang-is-phi/p/9675822.html">二十六║Client渲染、Server渲染知多少{补充}</a></li>
-<li><a id="post_title_link_9682289" href="https://www.cnblogs.com/laozhang-is-phi/p/9682289.html">二七║ Nuxt 基础：框架初探</a></li>
-<li><a id="post_title_link_9687504" href="https://www.cnblogs.com/laozhang-is-phi/p/9687504.html">二八║ Nuxt 基础：面向源码研究Nuxt.js</a></li>
-<li><a id="post_title_link_9697450" href="https://www.cnblogs.com/laozhang-is-phi/p/9697450.html">二九║ Nuxt实战：异步实现数据双端渲染</a></li>
-<li><a id="post_title_link_9702677" href="https://www.cnblogs.com/laozhang-is-phi/p/9702677.html">三十║ Nuxt实战：动态路由+同构</a></li>
-<li><a id="post_title_link_9713219" href="https://www.cnblogs.com/laozhang-is-phi/p/9713219.html">三十一║ Nuxt终篇：基于Vuex的权限验证探究</a></li>
-<li></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</ul>
-
-
-</div>
-**************************************************************
-
- 系统环境
-
-    windows 10、SQL Server 08+、Visual Studio 2019、Windows Server 2008 R2
-
-    后端技术：
-
-      * .Net Core 3.1 API（因为想单纯搭建前后端分离，因此就选用的API，如果想了解.Net Core MVC，也可以交流）
-      
-      * Swagger 前后端文档说明，基于RESTful风格编写接口
-
-      * Repository + Service 仓储模式编程
-
-      * Async和Await 异步编程
-
-      * Cors 简单的跨域解决方案
-
-      * AOP基于切面编程技术
-
-      * Autofac 轻量级IoC和DI依赖注入
-
-      * Vue 本地代理跨域方案，Nginx跨域代理
-
-      * JWT权限验证
-
- 
-
-    数据库技术
-
-      * SqlSugar 轻量级ORM框架，CodeFirst
-
-      * T4 模板生成
-
-      * AutoMapper 自动对象映射
-
- 
-
-    分布式缓存技术
-
-      * Redis 轻量级分布式缓存
-
- 
-
-    前端技术
-
-      * Vue 2.0 框架全家桶 Vue2 + VueRouter2 + Webpack + Axios + vue-cli + vuex
-
-      * ElementUI 基于Vue 2.0的组件库
-
-      * Nuxt.js服务端渲染SSR

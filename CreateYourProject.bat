@@ -1,8 +1,11 @@
+color 5
+echo "if u install template error,pls connect QQ:3143422472"
+
+
 color 3
+dotnet new -i Blog.Core.Webapi.Template
 
-dotnet new -i .template.config\Blog.Core.Webapi.Template.2.2.0.nupkg
-
-set /p OP=Please set your project name(for example:Baidu.Api):
+set /p OP=Please set your project name(for example:BlogMicService):
 
 md .1YourProject
 
